@@ -18,12 +18,14 @@ class RelationManager:
     __path: Path
     __staff_id2group_list: Id2IdList
     __group_id2subscribers: Id2IdList
+    __group_id2reporters: Id2IdList
 
     def __init__(self, path: Path = Path() / 'data' / 'bridge' / 'relation.json'):
         super(RelationManager, self).__init__()
         self.__path = path
         self.__staff_id2group_list: Id2IdList = {}
         self.__group_id2subscribers: Id2IdList = {}
+        self.__group_id2reporters: Id2IdList= {}
         self.__load()
 
     def __load(self):
@@ -32,9 +34,11 @@ class RelationManager:
                 load: SaveModel = json.load(file)
                 self.__staff_id2group_list = load['staff2groups']
                 self.__group_id2subscribers = load['group2subscribers']
+                self.__group_id2reporters = load['group2reporter']
         except KeyError:
             self.__staff_id2group_list = {}
             self.__group_id2subscribers = {}
+            self.__group_id2reporters = {}
 
     def __dump(self):
         with open(self.__path, 'w', encoding='utf-8') as file:
@@ -42,10 +46,10 @@ class RelationManager:
                                'group2subscribers': self.__group_id2subscribers}
             json.dump(save, file, ensure_ascii=False, indent=2)
 
-    def is_superuser(self, userid: Union[int, str]) -> bool:
+    def is_staff(self, userid: Union[int, str]) -> bool:
         return int(userid) in self.__staff_id2group_list.keys()
 
-    def get_superuser_groups(self, userid: Union[int, str]) -> List[int]:
+    def get_staff_groups(self, userid: Union[int, str]) -> List[int]:
         if self.is_superuser(userid):
             return self.__staff_id2group_list[int(userid)]
         else:
@@ -88,3 +92,67 @@ class RelationManager:
     def del_staffs4groups(self, user_ids: List[Union[int, str]], group_ids: List[Union[int, str]]):
         del_firsts4seconds(self.__staff_id2group_list, user_ids, group_ids)
         self.__dump()
+
+    def add_subscriber2reporter(self, sub_id: Union[int, str], rep_id: Union[int, str]):
+        add_first2second(self.__group_id2subscribers, sub_id, rep_id)
+        add_first2second(self.__group_id2reporters, rep_id, sub_id)
+        self.__dump()
+
+    def add_subscribers2reporter(self, sub_id: Union[int, str], rep_id: Union[int, str]):
+        add_firsts2second(self.__group_id2subscribers, sub_id, rep_id)
+        add_first2seconds(self.__group_id2reporters, rep_id, sub_id)
+        self.__dump()
+
+    def add_subscriber2reporters(self, sub_id: Union[int, str], rep_id: Union[int, str]):
+        add_first2seconds(self.__group_id2subscribers, sub_id, rep_id)
+        add_firsts2second(self.__group_id2reporters, rep_id, sub_id)
+        self.__dump()
+
+    def add_subscribers2reporters(self, sub_id: Union[int, str], rep_id: Union[int, str]):
+        add_firsts2seconds(self.__group_id2subscribers, sub_id, rep_id)
+        add_firsts2seconds(self.__group_id2reporters, rep_id, sub_id)
+        self.__dump()
+
+    def del_subscriber4reporter(self, sub_id: Union[int, str], rep_id: Union[int, str]):
+        del_first4second(self.__group_id2subscribers, sub_id, rep_id)
+        del_first4second(self.__group_id2reporters, rep_id, sub_id)
+        self.__dump()
+
+    def del_subscribers4reporter(self, sub_id: Union[int, str], rep_id: Union[int, str]):
+        del_firsts4second(self.__group_id2subscribers, sub_id, rep_id)
+        del_first4seconds(self.__group_id2reporters, rep_id, sub_id)
+        self.__dump()
+
+    def del_subscriber4reporters(self, sub_id: Union[int, str], rep_id: Union[int, str]):
+        del_first4seconds(self.__group_id2subscribers, sub_id, rep_id)
+        del_firsts4second(self.__group_id2reporters, rep_id, sub_id)
+        self.__dump()
+
+    def del_subscribers4reporters(self, sub_id: Union[int, str], rep_id: Union[int, str]):
+        del_firsts4seconds(self.__group_id2subscribers, sub_id, rep_id)
+        del_firsts4seconds(self.__group_id2reporters, rep_id, sub_id)
+        self.__dump()
+
+    def subsribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
+        if type(sub_id)==list and len(sub_id):
+            if type(sub_id)==list and len(sub_id):
+                self.add_subscribers2reporters(sub_id, rep_id)
+            else:
+                self.add_subscribers2reporter(sub_id, rep_id)
+        else:
+            if type(sub_id)==list and len(sub_id):
+                self.add_subscriber2reporters(sub_id, rep_id)
+            else:
+                self.add_subscriber2reporter(sub_id, rep_id)
+
+    def unsubsribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
+        if type(sub_id)==list and len(sub_id):
+            if type(sub_id)==list and len(sub_id):
+                self.del_subscribers4reporters(sub_id, rep_id)
+            else:
+                self.del_subscribers4reporter(sub_id, rep_id)
+        else:
+            if type(sub_id)==list and len(sub_id):
+                self.del_subscriber4reporters(sub_id, rep_id)
+            else:
+                self.del_subscriber4reporter(sub_id, rep_id)
