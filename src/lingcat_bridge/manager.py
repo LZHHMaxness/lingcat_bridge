@@ -51,7 +51,7 @@ class RelationManager:
         return int(userid) in self.__staff_id2group_list.keys()
 
     def get_staff_groups(self, userid: Union[int, str]) -> List[int]:
-        if self.is_superuser(userid):
+        if self.is_staff(userid):
             return self.__staff_id2group_list[int(userid)]
         else:
             return []
@@ -99,19 +99,19 @@ class RelationManager:
         add_first2second(self.__group_id2reporters, rep_id, sub_id)
         self.__dump()
 
-    def add_subscribers2reporter(self, sub_id: Union[int, str], rep_id: Union[int, str]):
-        add_firsts2second(self.__group_id2subscribers, sub_id, rep_id)
-        add_first2seconds(self.__group_id2reporters, rep_id, sub_id)
+    def add_subscribers2reporter(self, sub_ids: List[Union[int, str]], rep_id: Union[int, str]):
+        add_firsts2second(self.__group_id2subscribers, sub_ids, rep_id)
+        add_first2seconds(self.__group_id2reporters, rep_id, sub_ids)
         self.__dump()
 
-    def add_subscriber2reporters(self, sub_id: Union[int, str], rep_id: Union[int, str]):
-        add_first2seconds(self.__group_id2subscribers, sub_id, rep_id)
-        add_firsts2second(self.__group_id2reporters, rep_id, sub_id)
+    def add_subscriber2reporters(self, sub_id: Union[int, str], rep_ids: List[Union[int, str]]):
+        add_first2seconds(self.__group_id2subscribers, sub_id, rep_ids)
+        add_firsts2second(self.__group_id2reporters, rep_ids, sub_id)
         self.__dump()
 
-    def add_subscribers2reporters(self, sub_id: Union[int, str], rep_id: Union[int, str]):
-        add_firsts2seconds(self.__group_id2subscribers, sub_id, rep_id)
-        add_firsts2seconds(self.__group_id2reporters, rep_id, sub_id)
+    def add_subscribers2reporters(self, sub_ids: List[Union[int, str]], rep_ids: List[Union[int, str]]):
+        add_firsts2seconds(self.__group_id2subscribers, sub_ids, rep_ids)
+        add_firsts2seconds(self.__group_id2reporters, rep_ids, sub_ids)
         self.__dump()
 
     def del_subscriber4reporter(self, sub_id: Union[int, str], rep_id: Union[int, str]):
@@ -119,19 +119,19 @@ class RelationManager:
         del_first4second(self.__group_id2reporters, rep_id, sub_id)
         self.__dump()
 
-    def del_subscribers4reporter(self, sub_id: Union[int, str], rep_id: Union[int, str]):
-        del_firsts4second(self.__group_id2subscribers, sub_id, rep_id)
-        del_first4seconds(self.__group_id2reporters, rep_id, sub_id)
+    def del_subscribers4reporter(self, sub_ids: List[Union[int, str]], rep_id: Union[int, str]):
+        del_firsts4second(self.__group_id2subscribers, sub_ids, rep_id)
+        del_first4seconds(self.__group_id2reporters, rep_id, sub_ids)
         self.__dump()
 
-    def del_subscriber4reporters(self, sub_id: Union[int, str], rep_id: Union[int, str]):
-        del_first4seconds(self.__group_id2subscribers, sub_id, rep_id)
-        del_firsts4second(self.__group_id2reporters, rep_id, sub_id)
+    def del_subscriber4reporters(self, sub_id: Union[int, str], rep_ids: List[Union[int, str]]):
+        del_first4seconds(self.__group_id2subscribers, sub_id, rep_ids)
+        del_firsts4second(self.__group_id2reporters, rep_ids, sub_id)
         self.__dump()
 
-    def del_subscribers4reporters(self, sub_id: Union[int, str], rep_id: Union[int, str]):
-        del_firsts4seconds(self.__group_id2subscribers, sub_id, rep_id)
-        del_firsts4seconds(self.__group_id2reporters, rep_id, sub_id)
+    def del_subscribers4reporters(self, sub_ids: List[Union[int, str]], rep_ids: List[Union[int, str]]):
+        del_firsts4seconds(self.__group_id2subscribers, sub_ids, rep_ids)
+        del_firsts4seconds(self.__group_id2reporters, rep_ids, sub_ids)
         self.__dump()
 
     def subscribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
