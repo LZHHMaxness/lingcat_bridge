@@ -25,7 +25,7 @@ class RelationManager:
         self.__path = path
         self.__staff_id2group_list: Id2IdList = {}
         self.__group_id2subscribers: Id2IdList = {}
-        self.__group_id2reporters: Id2IdList= {}
+        self.__group_id2reporters: Id2IdList = {}
         self.__load()
 
     def __load(self):
@@ -43,7 +43,8 @@ class RelationManager:
     def __dump(self):
         with open(self.__path, 'w', encoding='utf-8') as file:
             save: SaveModel = {'staff2groups': self.__staff_id2group_list,
-                               'group2subscribers': self.__group_id2subscribers}
+                               'group2subscribers': self.__group_id2subscribers,
+                               'group2reporter': self.__group_id2reporters}
             json.dump(save, file, ensure_ascii=False, indent=2)
 
     def is_staff(self, userid: Union[int, str]) -> bool:
@@ -133,26 +134,26 @@ class RelationManager:
         del_firsts4seconds(self.__group_id2reporters, rep_id, sub_id)
         self.__dump()
 
-    def subsribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
-        if type(sub_id)==list and len(sub_id):
-            if type(sub_id)==list and len(sub_id):
+    def subscribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
+        if type(sub_id) == list and len(sub_id):
+            if type(sub_id) == list and len(sub_id):
                 self.add_subscribers2reporters(sub_id, rep_id)
             else:
                 self.add_subscribers2reporter(sub_id, rep_id)
         else:
-            if type(sub_id)==list and len(sub_id):
+            if type(sub_id) == list and len(sub_id):
                 self.add_subscriber2reporters(sub_id, rep_id)
             else:
                 self.add_subscriber2reporter(sub_id, rep_id)
 
-    def unsubsribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
-        if type(sub_id)==list and len(sub_id):
-            if type(sub_id)==list and len(sub_id):
+    def unsubscribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
+        if type(sub_id) == list and len(sub_id):
+            if type(sub_id) == list and len(sub_id):
                 self.del_subscribers4reporters(sub_id, rep_id)
             else:
                 self.del_subscribers4reporter(sub_id, rep_id)
         else:
-            if type(sub_id)==list and len(sub_id):
+            if type(sub_id) == list and len(sub_id):
                 self.del_subscriber4reporters(sub_id, rep_id)
             else:
                 self.del_subscriber4reporter(sub_id, rep_id)
