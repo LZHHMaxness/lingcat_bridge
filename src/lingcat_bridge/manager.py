@@ -88,4 +88,3 @@ class RelationManager:
     def del_staffs4groups(self, user_ids: List[Union[int, str]], group_ids: List[Union[int, str]]):
         del_firsts4seconds(self.__staff_id2group_list, user_ids, group_ids)
         self.__dump()
-        
