@@ -1,8 +1,16 @@
 import json
 from pathlib import Path
 from typing import Dict, List, Union
+from .utils.Id2IdList import (Id2IdList,
+                              add_first2second,
+                              add_first2seconds,
+                              add_firsts2second,
+                              add_firsts2seconds,
+                              del_first4second,
+                              del_first4seconds,
+                              del_firsts4second,
+                              del_firsts4seconds)
 
-Id2IdList = Dict[int, List[int]]
 SaveModel = Dict[str, Id2IdList]
 
 
@@ -49,63 +57,35 @@ class RelationManager:
         else:
             return []
 
-    def add_superuser2group(self, userid: Union[int, str], group_id: Union[int, str]):
-        userid = int(userid)
-        group_id = int(group_id)
-        if userid not in self.__staff_id2group_list:
-            self.__staff_id2group_list[userid] = []
-        self.__staff_id2group_list[userid].append(group_id)
+    def add_staff2group(self, userid: Union[int, str], group_id: Union[int, str]):
+        add_first2second(self.__staff_id2group_list, userid, group_id)
         self.__dump()
 
-    def add_superuser2groups(self, userid: Union[int, str], group_ids: List[Union[int, str]]):
-        userid = int(userid)
-        if not self.is_superuser(userid):
-            self.__staff_id2group_list[userid] = []
-        for group_id in group_ids:
-            group_id = int(group_id)
-            self.__staff_id2group_list[userid].append(group_id)
+    def add_staff2groups(self, userid: Union[int, str], group_ids: List[Union[int, str]]):
+        add_first2seconds(self.__staff_id2group_list, userid, group_ids)
         self.__dump()
 
-    def add_superusers2group(self, user_ids: List[Union[int, str]], group_id: Union[int, str]):
-        for userid in user_ids:
-            self.add_superuser2group(userid, group_id)
-        return
-
-    def add_superusers2groups(self, user_ids: List[Union[int, str]], group_ids: List[Union[int, str]]):
-        for userid in user_ids:
-            self.add_superuser2groups(userid, group_ids)
-        return
-
-    def del_superuser4group(self, userid: Union[int, str], group_id: Union[int, str]):
-        userid = int(userid)
-        group_id = int(group_id)
-        if not self.is_superuser(userid):
-            return
-        if group_id in self.__staff_id2group_list[userid]:
-            self.__staff_id2group_list[userid].remove(group_id)
-            self.__dump()
-        else:
-            return
-
-    def del_superuser4groups(self, userid: Union[int, str], group_ids: List[Union[int, str]]):
-        userid = int(userid)
-        if not self.is_superuser(userid):
-            return
-        for group_id in group_ids:
-            group_id = int(group_id)
-            if group_id in self.__staff_id2group_list[userid]:
-                self.__staff_id2group_list[userid].remove(group_id)
+    def add_staffs2group(self, user_ids: List[Union[int, str]], group_id: Union[int, str]):
+        add_firsts2second(self.__staff_id2group_list, user_ids, group_id)
         self.__dump()
-        return
 
-    def del_superusers4group(self, user_ids: List[Union[int, str]], group_id: Union[int, str]):
-        for userid in user_ids:
-            self.del_superuser4group(userid, group_id)
-        return
+    def add_staffs2groups(self, user_ids: List[Union[int, str]], group_ids: List[Union[int, str]]):
+        add_firsts2seconds(self.__staff_id2group_list, user_ids, group_ids)
+        self.__dump()
 
-    def del_superusers4groups(self, user_ids: List[Union[int, str]], group_ids: List[Union[int, str]]):
-        for userid in user_ids:
-            self.del_superuser4groups(userid, group_ids)
-        return
+    def del_staff4group(self, userid: Union[int, str], group_id: Union[int, str]):
+        del_first4second(self.__staff_id2group_list, userid, group_id)
+        self.__dump()
 
-    def add_subscriber2group(self, subscriber: Union[int, str], group_id:Union[int, str]):
+    def del_staff4groups(self, userid: Union[int, str], group_ids: List[Union[int, str]]):
+        del_first4seconds(self.__staff_id2group_list, userid, group_ids)
+        self.__dump()
+
+    def del_staffs4group(self, user_ids: List[Union[int, str]], group_id: Union[int, str]):
+        del_firsts4second(self.__staff_id2group_list, user_ids, group_id)
+        self.__dump()
+
+    def del_staffs4groups(self, user_ids: List[Union[int, str]], group_ids: List[Union[int, str]]):
+        del_firsts4seconds(self.__staff_id2group_list, user_ids, group_ids)
+        self.__dump()
+        
