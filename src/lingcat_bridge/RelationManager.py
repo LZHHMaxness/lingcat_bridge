@@ -35,7 +35,7 @@ class RelationManager:
                 load: SaveModel = json.load(file)
                 self.__staff_id2group_list = load['staff2groups']
                 self.__group_id2subscribers = load['group2subscribers']
-                self.__group_id2reporters = load['group2reporter']
+                self.__group_id2reporters = load['group2reporters']
         except KeyError:
             self.__staff_id2group_list = {}
             self.__group_id2subscribers = {}
@@ -45,7 +45,7 @@ class RelationManager:
         with open(self.__path, 'w', encoding='utf-8') as file:
             save: SaveModel = {'staff2groups': self.__staff_id2group_list,
                                'group2subscribers': self.__group_id2subscribers,
-                               'group2reporter': self.__group_id2reporters}
+                               'group2reporters': self.__group_id2reporters}
             json.dump(save, file, ensure_ascii=False, indent=2)
 
     def is_staff(self, userid: Union[int, str]) -> bool:
@@ -94,6 +94,31 @@ class RelationManager:
     def del_staffs4groups(self, user_ids: List[Union[int, str]], group_ids: List[Union[int, str]]):
         del_firsts4seconds(self.__staff_id2group_list, user_ids, group_ids)
         self.__dump()
+    
+    def make_staff(self, sta_id: Union[int, str, List[Union[int, str]]], grp_id: Union[int, str, List[Union[int, str]]]):
+        if type(sta_id) == list:
+            if type(grp_id) == list:
+                self.add_staffs2groups(sta_id, grp_id)
+            else:
+                self.add_staffs2group(sta_id, grp_id)
+        else:
+            if type(grp_id) == list:
+                self.add_staff2groups(sta_id, grp_id)
+            else:
+                self.add_staff2group(sta_id, grp_id)
+
+    def cancel_staff(self, sta_id: Union[int, str, List[Union[int, str]]],
+                    grp_id: Union[int, str, List[Union[int, str]]]):
+        if type(sta_id) == list:
+            if type(grp_id) == list:
+                self.del_staffs4groups(sta_id, grp_id)
+            else:
+                self.del_staffs4group(sta_id, grp_id)
+        else:
+            if type(grp_id) == list:
+                self.del_staff4groups(sta_id, grp_id)
+            else:
+                self.del_staff4group(sta_id, grp_id)
 
     def add_subscriber2reporter(self, sub_id: Union[int, str], rep_id: Union[int, str]):
         add_first2second(self.__group_id2subscribers, sub_id, rep_id)
