@@ -134,26 +134,26 @@ class RelationManager:
         del_firsts4seconds(self.__group_id2reporters, rep_ids, sub_ids)
         self.__dump()
 
-    def subscribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
-        if type(sub_id) == list and len(sub_id):
-            if type(sub_id) == list and len(sub_id):
+    def subscribe(self, sub_id: Union[int, str, List[Union[int, str]]], rep_id: Union[int, str, List[Union[int, str]]]):
+        if type(sub_id) == list:
+            if type(rep_id) == list:
                 self.add_subscribers2reporters(sub_id, rep_id)
             else:
                 self.add_subscribers2reporter(sub_id, rep_id)
         else:
-            if type(sub_id) == list and len(sub_id):
+            if type(rep_id) == list:
                 self.add_subscriber2reporters(sub_id, rep_id)
             else:
                 self.add_subscriber2reporter(sub_id, rep_id)
 
-    def unsubscribe(self, sub_id: Union[int, str, list], rep_id: Union[int, str, list]):
-        if type(sub_id) == list and len(sub_id):
-            if type(sub_id) == list and len(sub_id):
+    def unsubscribe(self, sub_id: Union[int, str, List[Union[int, str]]], rep_id: Union[int, str, List[Union[int, str]]]):
+        if type(sub_id) == list:
+            if type(rep_id) == list:
                 self.del_subscribers4reporters(sub_id, rep_id)
             else:
                 self.del_subscribers4reporter(sub_id, rep_id)
         else:
-            if type(sub_id) == list and len(sub_id):
+            if type(rep_id) == list:
                 self.del_subscriber4reporters(sub_id, rep_id)
             else:
                 self.del_subscriber4reporter(sub_id, rep_id)
