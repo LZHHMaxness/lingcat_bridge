@@ -1,23 +1,23 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Set, Union
 
-Id2IdList = Dict[int, List[int]]
+Id2IdList = Dict[int, Set[int]]
 
 
 def add_first2second(it: Id2IdList, first: Union[int, str], second: Union[int, str]):
     first = int(first)
     second = int(second)
     if first not in it.keys():
-        it[first] = []
-    it[first].append(second)
+        it[first] = {}
+    it[first].add(second)
 
 
 def add_first2seconds(it: Id2IdList, first: Union[int, str], seconds: List[Union[int, str]]):
     first = int(first)
     if first not in it.keys():
-        it[first] = []
+        it[first] = {}
     for second in seconds:
         second = int(second)
-        it[first].append(second)
+        it[first].add(second)
 
 
 def add_firsts2second(it: Id2IdList, firsts: List[Union[int, str]], second: Union[int, str]):
