@@ -28,12 +28,9 @@ class RawNews:
             self.__end_time = (datetime.datetime.fromtimestamp(self.__start_time) + datetime.timedelta(days=7))\
                 .timestamp()
         else:
-            self.__end_time = datetime.datetime.fromtimestamp(end_time)
+            self.__end_time = end_time
 
     @classmethod
     def get_raw_news_delta_time_from_str(cls, message: Message, end_time_delta: datetime.timedelta):
         """通过时间差设置终止时间以获得RawNews"""
-        return cls(message, datetime.datetime.now().timestamp(), (datetime.datetime.now()+end_time_delta))
-
-
-
+        return cls(message, datetime.datetime.now().timestamp(), (datetime.datetime.now()+end_time_delta).timestamp())
