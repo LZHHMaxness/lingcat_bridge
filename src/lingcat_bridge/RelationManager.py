@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from typing import Dict, List, Union
+
 from .utils.Id2IdList import (Id2IdList,
                               add_first2second,
                               add_first2seconds,
@@ -146,7 +147,8 @@ class RelationManager:
             else:
                 self.add_subscriber2reporter(sub_id, rep_id)
 
-    def unsubscribe(self, sub_id: Union[int, str, List[Union[int, str]]], rep_id: Union[int, str, List[Union[int, str]]]):
+    def unsubscribe(self, sub_id: Union[int, str, List[Union[int, str]]],
+                    rep_id: Union[int, str, List[Union[int, str]]]):
         if type(sub_id) == list:
             if type(rep_id) == list:
                 self.del_subscribers4reporters(sub_id, rep_id)
